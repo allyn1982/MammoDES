@@ -16,7 +16,7 @@ def run_simulation():
     parser.add_argument('--wf_1ss', type=bool, default=False, help='Whether 1SS is True or False')
     parser.add_argument('--ai_time', type=str, default='none', choices=['morning', 'afternoon', 'any', 'none'], help='Time of day for AI')
     parser.add_argument('--rad_change', type=bool, default=False, help='Dedicate one rad to screen + same day: True or False')
-    parser.add_argument('--rad_change_2', type=bool, default=False, help='When rad_change is True, rad_change_2 means dedicate one rad to screen + same day and regular dxWhether rad_change_2: True or False')
+    parser.add_argument('--rad_change_2', type=bool, default=False, help='When rad_change is True, rad_change_2 means dedicate one rad to screen + same day and regular dx: True or False')
 
     # Parse arguments
     args = parser.parse_args()
