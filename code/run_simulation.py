@@ -5,7 +5,6 @@ import random
 from utils import compute_durations_1ss, compute_durations_baseline
 from run_clinic import main
 
-random.seed(42)
 
 def run_simulation():
     # Set up argument parser
