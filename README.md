@@ -17,7 +17,7 @@ Yannan Lin, MD, MPH, PhD1, Anne C. Hoyt, MD2, Vladimir G. Manuel, MD3,4, Moira I
 ## Introduction
 Artificial intelligence (AI) shows promise in clinical tasks, yet its integration into workflows remains underexplored. This study proposes an AI-aided same-day diagnostic imaging workup to reduce recall rates following abnormal screening mammograms and alleviate patient anxiety while waiting for the diagnostic examinations. This paper explores different scenarios for implementing an AI-assisted same-day diagnostic workup workflow in a breast imaging center. It examines various options for the timing of the AI-assisted workflow—whether it operates continuously throughout the day, only in the morning, or only in the afternoon. Additionally, it considers the allocation of radiologists, such as assigning specific radiologists to handle particular types of cases, like screening mammograms combined with same-day diagnostic workups. 
 
-A simpilfied version of the workflows have been published: https://pubmed.ncbi.nlm.nih.gov/38827101/ 
+A simplified version of the workflows has been published: https://pubmed.ncbi.nlm.nih.gov/38827101/ 
 ![2241f1](https://github.com/user-attachments/assets/41eb5223-42db-49a8-a6c0-f44ee47369d7)
 
 ## Steps to run the simulation models
