@@ -57,7 +57,7 @@ The following is a list of parameters to explore.
 
 ### Step 4 - Output and post-simulation analysis
 
-The output of the simulation will be saved in the ./code/output/ folder. Each patient and the timestamp of each step are logged for post-simuluation analysis. An example of the output file is as follows. 
+The output of the simulation will be saved in the ./code/output/ folder. Each patient and the timestamp of each step are logged for post-simuluation analysis. The two workflows are logged separately. An example of the output file is as follows. 
 
 <img width="867" alt="Screenshot 2024-09-01 at 8 51 16 PM" src="https://github.com/user-attachments/assets/d14d5ffd-d730-4466-b43b-44241d096a3c">
 
