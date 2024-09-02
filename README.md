@@ -55,6 +55,11 @@ The following is a list of parameters to explore.
 > 
 > rad_change_2: When rad_change is True, rad_change_2 means dedicating one radiologst to screening mammogramphy + same-day diagnostic exams + regular diagnostic exams: True or False')
 
+### Step 4 - Output and post-simulation analysis
+
+The output of the simulation will be saved in the ./code/output/ folder. Each patient and the timestamp of each step are logged for post-simuluation analysis. An example of the output file is as follows. 
+
+
 ### Notes
 1. To change the number of clinic days of the simulation to, for example 100, use: --num_iteration=100
 2. When wf_1ss is False (no AI-aided same-day diagnostic workflow), ai_time must be 'none'.
