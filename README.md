@@ -57,9 +57,15 @@ The following is a list of parameters to explore.
 
 ### Step 4 - Output and post-simulation analysis
 
-The output of the simulation will be saved in the ./code/output/ folder. Each patient and the timestamp of each step are logged for post-simuluation analysis. The two workflows are logged separately. An example of the output file is as follows. 
+The output of the simulation will be saved in the ./code/output/ folder. Each patient and the timestamp of each step are logged for post-simuluation analysis. The two workflows are logged separately. An example of the output file is as follows. The columns in the output file logs the timestamp for each step. The lengty of stay in the clinic can be calculdated using (exit_ts-arrival_ts).
 
 <img width="867" alt="Screenshot 2024-09-01 at 8 51 16 PM" src="https://github.com/user-attachments/assets/d14d5ffd-d730-4466-b43b-44241d096a3c">
+
+### Workflo Customization
+
+The user may customize this code for their own workflow simulation with different model paramters. 
+1. ./data/exam_percent_BK_22_12.csv stores the proportion of exams for each hour. E.g., exam_type_new='Bx Mammo', h_7=0, there are 0% stereotactic-guided biopsy from 7 am to 8 am.
+2. ./data/num_pt_per_hour_BK_22_12.csv stores the average number of patients per hour. E.g., hour=7, avg=6.09 means from 7 am to 8 am, there are on average 6.09 patients. 
 
 ### Notes
 1. To change the number of clinic days of the simulation to, for example 100, use: --num_iteration=100
