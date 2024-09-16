@@ -61,7 +61,7 @@ The output of the simulation will be saved in the ./code/output/ folder. Each pa
 
 <img width="867" alt="Screenshot 2024-09-01 at 8 51 16 PM" src="https://github.com/user-attachments/assets/d14d5ffd-d730-4466-b43b-44241d096a3c">
 
-### Workflo Customization
+### Workflow Customization
 
 The user may customize this code for their own workflow simulation with different model paramters. They may modify the values in the following input files.
 1. ./data/exam_percent_BK_22_12.csv stores the proportion of exams for each hour. E.g., exam_type_new='Bx Mammo', h_7=0, there are 0% stereotactic-guided biopsy from 7 am to 8 am.
