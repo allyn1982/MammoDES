@@ -63,7 +63,7 @@ The output of the simulation will be saved in the ./code/output/ folder. Each pa
 
 ### Workflo Customization
 
-The user may customize this code for their own workflow simulation with different model paramters. 
+The user may customize this code for their own workflow simulation with different model paramters. They may modify the values in the following input files.
 1. ./data/exam_percent_BK_22_12.csv stores the proportion of exams for each hour. E.g., exam_type_new='Bx Mammo', h_7=0, there are 0% stereotactic-guided biopsy from 7 am to 8 am.
 2. ./data/num_pt_per_hour_BK_22_12.csv stores the average number of patients per hour. E.g., hour=7, avg=6.09 means from 7 am to 8 am, there are on average 6.09 patients. 
 
