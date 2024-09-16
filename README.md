@@ -39,7 +39,7 @@ By default, the simulation runs the baseline workflow without the AI-aided same-
 
 An example of the AI-aided workflow with AI running in the morning, dedicating one radiologist to screening mammogramphy + same-day diagnostic exams, and no radiologist to screening mammogramphy + same-day diagnostic exams + regular diagnostic exams. 
 
-`python run_simulation.py --wf_1ss True --ai_time monring --rad_change True --rad_change_2 False`
+`python run_simulation.py --wf_1ss True --ai_time morning --rad_change True --rad_change_2 False`
 
 An example of the AI-aided workflow with AI running in the afternoon, dedicating no radiologist to screening mammogramphy + same-day diagnostic exams, and no radiologist to screening mammogramphy + same-day diagnostic exams + regular diagnostic exams. 
 
