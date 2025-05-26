@@ -1,6 +1,7 @@
 <h2 align="center">Integrating AI into Clinical Workflows: A Simulation Study on Implementing AI-aided Same-day Diagnostic Testing Following an Abnormal Screening Mammogram
 
 ## AMIA 2024 Annual Symposium Paper
+## https://pmc.ncbi.nlm.nih.gov/articles/PMC12099379/ 
   
 Yannan Lin, MD, MPH, PhD1, Anne C. Hoyt, MD2, Vladimir G. Manuel, MD3,4, Moira Inkelas, MPH, PhD4,5, Cleo K. Maehara1, MD, MMSc, Mehmet Ulvi Saygi Ayvaci, PhD6, Mehmet Eren Ahsen, PhD7,8, William Hsu, PhD1,9
 
@@ -17,8 +18,8 @@ Yannan Lin, MD, MPH, PhD1, Anne C. Hoyt, MD2, Vladimir G. Manuel, MD3,4, Moira I
 ## Introduction
 Artificial intelligence (AI) shows promise in clinical tasks, yet its integration into workflows remains underexplored. This study proposes an AI-aided same-day diagnostic imaging workup to reduce recall rates following abnormal screening mammograms and alleviate patient anxiety while waiting for the diagnostic examinations. This paper explores different scenarios for implementing an AI-assisted same-day diagnostic workup workflow in a breast imaging center using discrete event simulation (DES). It examines various options for the timing of the AI-assisted workflow—whether it operates continuously throughout the day, only in the morning, or only in the afternoon. Additionally, it considers the allocation of radiologists, such as assigning specific radiologists to handle particular types of cases, like screening mammograms combined with same-day diagnostic workups. The supplemental materials of the paper is titled Supplemental Material_v20240812.docx in this repo. 
 
-A simplified version of the workflows has been published: https://pubmed.ncbi.nlm.nih.gov/38827101/ 
-![2241f1](https://github.com/user-attachments/assets/41eb5223-42db-49a8-a6c0-f44ee47369d7)
+Workflow:
+![Figure 1](https://github.com/user-attachments/assets/4c5dc901-b462-4bcd-8f1d-c8bfb9997dbc)
 
 ## Steps to run the simulation models
 
