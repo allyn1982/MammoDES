@@ -74,6 +74,7 @@ The user may customize this code for their own workflow simulation with differen
 3. wf_1ss must be True for any AI-aided workflow
 4. If wf_1ss is False (baseline workflow), rad_change and rad_change_2 can not be True as they are only for the AI-aided workflow
 5. In order for rad_change_2 to be True, rad_change needs to be True.
+6. 'code' contains the process-oriented version of the simulation, while 'code_oop' contains the object-oriented version.
 
 
 
