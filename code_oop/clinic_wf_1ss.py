@@ -138,22 +138,6 @@ class MammographyClinicWorkflow:
         pct_screen_mammo_after_ai_dx_mammo_scheduled = cumulative_percentages[2] if ai else 0
         pct_screen_mammo_after_ai_us_scheduled = cumulative_percentages[3] if ai else 0
 
-        # These need to be re-aligned based on the new cumulative_percentages list and the `run_workflow` logic.
-        # The variables `pct_dx_mammo_us_scheduled`, `pct_dx_mammo_scheduled`, `pct_dx_us_scheduled`
-        # should now reflect their *new cumulative positions* if AI is active,
-        # or their baseline cumulative positions if AI is not active.
-
-        # Correct mapping of the cumulative_percentages to the return tuple:
-        # Note: The number of elements in current_scenario_individual_probs will be different based on AI.
-        # If AI is OFF: 1 (screen) + 8 (other baseline types) = 9 individual probs.
-        # If AI is ON: 1 (screen no AI) + 3 (AI referrals) + 8 (other baseline types) = 12 individual probs.
-
-        # This requires the unpacking in `run_workflow` to be dynamic or handle more values.
-        # Let's reconsider the return signature to be simpler, or make the `run_workflow` logic more robust.
-
-        # Simpler approach: `_calculate_exam_percentages` returns a dictionary of all final thresholds.
-        # `run_workflow` then accesses them by key. This is more flexible.
-
         final_thresholds = {}
         current_sum = 0
         idx = 0
