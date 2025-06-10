@@ -77,67 +77,6 @@ class MammoClinic(object):
         yield self.env.timeout(self.rg.normal(1.0, 0.2))
 
 
-def compute_durations(timestamp_df):
-    """
-    Combines the logic from both compute_durations_baseline and compute_durations_1ss.
-    Computes various duration metrics from a DataFrame of timestamps.
-    Handles both baseline and 1SS specific columns gracefully by using .get() or checking for existence.
-    """
-    timestamp_df['checkin_time'] = timestamp_df['release_checkin_staff_ts'] - timestamp_df['got_checkin_staff_ts']
-    timestamp_df['public_wait_room_time'] = timestamp_df['release_public_wait_room_ts'] - timestamp_df['got_public_wait_room_ts']
-    timestamp_df['consent_time'] = timestamp_df['release_consent_staff_ts'] - timestamp_df['got_consent_staff_ts']
-    timestamp_df['change_room_time'] = timestamp_df['release_change_room_ts'] - timestamp_df['got_change_room_ts']
-    timestamp_df['gowned_wait_room_time'] = timestamp_df['release_gowned_wait_room_ts'] - timestamp_df['got_gowned_wait_room_ts']
-    timestamp_df['screen_mammo_time'] = timestamp_df['release_screen_scanner_ts'] - timestamp_df['got_screen_scanner_ts']
-
-    # AI specific durations (will be NA if 1SS is not active)
-    timestamp_df['ai_assess_time'] = timestamp_df['end_ai_assess_ts'] - timestamp_df['begin_ai_assess_ts']
-
-    # Diagnostic pathways, handling both 1SS and baseline names
-    timestamp_df['dx_mammo_time'] = timestamp_df['release_dx_scanner_ts'] - timestamp_df['got_dx_scanner_ts']
-    timestamp_df['dx_us_time'] = timestamp_df['release_us_machine_ts'] - timestamp_df['got_us_machine_ts']
-
-    timestamp_df['dx_mammo_us_time_1'] = timestamp_df['release_dx_scanner_before_us_ts'] - timestamp_df['got_dx_scanner_before_us_ts']
-    timestamp_df['dx_mammo_us_time_2'] = timestamp_df['release_dx_scanner_us_machine_ts'] - timestamp_df['got_us_machine_after_dx_scanner_ts']
-    timestamp_df['dx_mammo_us_time'] = timestamp_df['dx_mammo_us_time_1'] + timestamp_df['dx_mammo_us_time_2']
-
-    # 1SS specific diagnostic times
-    timestamp_df['dx_mammo_after_ai_time'] = timestamp_df['release_dx_scanner_after_ai_ts'] - timestamp_df['got_dx_scanner_after_ai_ts']
-    timestamp_df['dx_us_after_ai_time'] = timestamp_df['release_us_machine_after_ai_ts'] - timestamp_df['got_us_machine_after_ai_ts']
-
-    timestamp_df['dx_mammo_us_after_ai_time_1'] = timestamp_df['release_dx_scanner_before_us_after_ai_ts'] - timestamp_df['got_dx_scanner_before_us_after_ai_ts']
-    timestamp_df['dx_mammo_us_after_ai_time_2'] = timestamp_df['release_dx_scanner_us_machine_after_ai_ts'] - timestamp_df['got_us_machine_after_dx_scanner_after_ai_ts']
-    timestamp_df['dx_mammo_us_after_ai_time'] = timestamp_df['dx_mammo_us_after_ai_time_1'] + timestamp_df['dx_mammo_us_after_ai_time_2']
-
-
-    timestamp_df['us_guided_bx_time'] = timestamp_df['release_us_machine_after_bx_ts'] - timestamp_df['got_us_machine_bx_ts']
-    timestamp_df['mammo_guided_bx_time'] = timestamp_df['release_scanner_after_post_bx_mammo_ts'] - timestamp_df['got_scanner_bx_ts']
-    timestamp_df['mri_guided_bx_time'] = timestamp_df['release_mri_machine_ts'] - timestamp_df['got_mri_machine_ts']
-
-    timestamp_df['screen_us_time'] = timestamp_df['release_screen_us_machine_ts'] - timestamp_df['got_screen_us_machine_ts']
-
-    timestamp_df['checkout_change_room_time'] = timestamp_df['release_checkout_change_room_ts'] - timestamp_df['got_checkout_change_room_ts']
-
-    # Radiologist review times (can be associated with different dx types or 1SS)
-    timestamp_df['rad_dx_mammo_time'] = timestamp_df['release_rad_dx_mammo_ts'] - timestamp_df['get_rad_dx_mammo_ts']
-    timestamp_df['rad_dx_us_time'] = timestamp_df['release_rad_dx_us_ts'] - timestamp_df['get_rad_dx_us_ts']
-    timestamp_df['rad_dx_mammo_us_mammo_time'] = timestamp_df['release_rad_dx_mammo_us_mammo_ts'] - timestamp_df['get_rad_dx_mammo_us_mammo_ts']
-    timestamp_df['rad_dx_mammo_us_us_time'] = timestamp_df['release_rad_dx_mammo_us_us_ts'] - timestamp_df['get_rad_dx_mammo_us_us_ts']
-
-    # 1SS specific rad review times
-    timestamp_df['rad_dx_mammo_us_mammo_after_ai_time'] = timestamp_df['release_rad_dx_mammo_us_mammo_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_us_mammo_after_ai_ts']
-    timestamp_df['rad_dx_mammo_us_us_after_ai_time'] = timestamp_df['release_rad_dx_mammo_us_us_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_us_us_after_ai_ts']
-    timestamp_df['rad_dx_mammo_after_ai_time'] = timestamp_df['release_rad_dx_mammo_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_after_ai_ts']
-    timestamp_df['rad_dx_us_after_ai_time'] = timestamp_df['release_rad_dx_us_after_ai_ts'] - timestamp_df['get_rad_dx_us_after_ai_ts']
-
-    timestamp_df['rad_us_bx_time'] = timestamp_df['release_rad_us_bx_ts'] - timestamp_df['get_rad_us_bx_ts']
-    timestamp_df['rad_mammo_bx_time'] = timestamp_df['release_rad_mammo_bx_ts'] - timestamp_df['get_rad_mammo_bx_ts']
-    timestamp_df['rad_mri_bx_time'] = timestamp_df['release_rad_mri_bx_ts'] - timestamp_df['get_rad_mri_bx_ts']
-
-    timestamp_df['total_system_time'] = timestamp_df['exit_system_ts'] - timestamp_df['arrival_ts']
-
-    return timestamp_df
-
 class BaseWorkflowHandler:
     """
     Base class for all patient workflow handlers.
@@ -674,3 +613,63 @@ class ScreenUSWorkflow(BaseWorkflowHandler):
             yield self.env.process(self.clinic.get_screen_us(self.patient)) # Changed get_screen_US to get_screen_us
             self.timestamps['release_screen_us_machine_ts'] = self.env.now
 
+def compute_durations(timestamp_df):
+    """
+    Combines the logic from both compute_durations_baseline and compute_durations_1ss.
+    Computes various duration metrics from a DataFrame of timestamps.
+    Handles both baseline and 1SS specific columns gracefully by using .get() or checking for existence.
+    """
+    timestamp_df['checkin_time'] = timestamp_df['release_checkin_staff_ts'] - timestamp_df['got_checkin_staff_ts']
+    timestamp_df['public_wait_room_time'] = timestamp_df['release_public_wait_room_ts'] - timestamp_df['got_public_wait_room_ts']
+    timestamp_df['consent_time'] = timestamp_df['release_consent_staff_ts'] - timestamp_df['got_consent_staff_ts']
+    timestamp_df['change_room_time'] = timestamp_df['release_change_room_ts'] - timestamp_df['got_change_room_ts']
+    timestamp_df['gowned_wait_room_time'] = timestamp_df['release_gowned_wait_room_ts'] - timestamp_df['got_gowned_wait_room_ts']
+    timestamp_df['screen_mammo_time'] = timestamp_df['release_screen_scanner_ts'] - timestamp_df['got_screen_scanner_ts']
+
+    # AI specific durations (will be NA if 1SS is not active)
+    timestamp_df['ai_assess_time'] = timestamp_df['end_ai_assess_ts'] - timestamp_df['begin_ai_assess_ts']
+
+    # Diagnostic pathways, handling both 1SS and baseline names
+    timestamp_df['dx_mammo_time'] = timestamp_df['release_dx_scanner_ts'] - timestamp_df['got_dx_scanner_ts']
+    timestamp_df['dx_us_time'] = timestamp_df['release_us_machine_ts'] - timestamp_df['got_us_machine_ts']
+
+    timestamp_df['dx_mammo_us_time_1'] = timestamp_df['release_dx_scanner_before_us_ts'] - timestamp_df['got_dx_scanner_before_us_ts']
+    timestamp_df['dx_mammo_us_time_2'] = timestamp_df['release_dx_scanner_us_machine_ts'] - timestamp_df['got_us_machine_after_dx_scanner_ts']
+    timestamp_df['dx_mammo_us_time'] = timestamp_df['dx_mammo_us_time_1'] + timestamp_df['dx_mammo_us_time_2']
+
+    # 1SS specific diagnostic times
+    timestamp_df['dx_mammo_after_ai_time'] = timestamp_df['release_dx_scanner_after_ai_ts'] - timestamp_df['got_dx_scanner_after_ai_ts']
+    timestamp_df['dx_us_after_ai_time'] = timestamp_df['release_us_machine_after_ai_ts'] - timestamp_df['got_us_machine_after_ai_ts']
+
+    timestamp_df['dx_mammo_us_after_ai_time_1'] = timestamp_df['release_dx_scanner_before_us_after_ai_ts'] - timestamp_df['got_dx_scanner_before_us_after_ai_ts']
+    timestamp_df['dx_mammo_us_after_ai_time_2'] = timestamp_df['release_dx_scanner_us_machine_after_ai_ts'] - timestamp_df['got_us_machine_after_dx_scanner_after_ai_ts']
+    timestamp_df['dx_mammo_us_after_ai_time'] = timestamp_df['dx_mammo_us_after_ai_time_1'] + timestamp_df['dx_mammo_us_after_ai_time_2']
+
+
+    timestamp_df['us_guided_bx_time'] = timestamp_df['release_us_machine_after_bx_ts'] - timestamp_df['got_us_machine_bx_ts']
+    timestamp_df['mammo_guided_bx_time'] = timestamp_df['release_scanner_after_post_bx_mammo_ts'] - timestamp_df['got_scanner_bx_ts']
+    timestamp_df['mri_guided_bx_time'] = timestamp_df['release_mri_machine_ts'] - timestamp_df['got_mri_machine_ts']
+
+    timestamp_df['screen_us_time'] = timestamp_df['release_screen_us_machine_ts'] - timestamp_df['got_screen_us_machine_ts']
+
+    timestamp_df['checkout_change_room_time'] = timestamp_df['release_checkout_change_room_ts'] - timestamp_df['got_checkout_change_room_ts']
+
+    # Radiologist review times (can be associated with different dx types or 1SS)
+    timestamp_df['rad_dx_mammo_time'] = timestamp_df['release_rad_dx_mammo_ts'] - timestamp_df['get_rad_dx_mammo_ts']
+    timestamp_df['rad_dx_us_time'] = timestamp_df['release_rad_dx_us_ts'] - timestamp_df['get_rad_dx_us_ts']
+    timestamp_df['rad_dx_mammo_us_mammo_time'] = timestamp_df['release_rad_dx_mammo_us_mammo_ts'] - timestamp_df['get_rad_dx_mammo_us_mammo_ts']
+    timestamp_df['rad_dx_mammo_us_us_time'] = timestamp_df['release_rad_dx_mammo_us_us_ts'] - timestamp_df['get_rad_dx_mammo_us_us_ts']
+
+    # 1SS specific rad review times
+    timestamp_df['rad_dx_mammo_us_mammo_after_ai_time'] = timestamp_df['release_rad_dx_mammo_us_mammo_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_us_mammo_after_ai_ts']
+    timestamp_df['rad_dx_mammo_us_us_after_ai_time'] = timestamp_df['release_rad_dx_mammo_us_us_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_us_us_after_ai_ts']
+    timestamp_df['rad_dx_mammo_after_ai_time'] = timestamp_df['release_rad_dx_mammo_after_ai_ts'] - timestamp_df['get_rad_dx_mammo_after_ai_ts']
+    timestamp_df['rad_dx_us_after_ai_time'] = timestamp_df['release_rad_dx_us_after_ai_ts'] - timestamp_df['get_rad_dx_us_after_ai_ts']
+
+    timestamp_df['rad_us_bx_time'] = timestamp_df['release_rad_us_bx_ts'] - timestamp_df['get_rad_us_bx_ts']
+    timestamp_df['rad_mammo_bx_time'] = timestamp_df['release_rad_mammo_bx_ts'] - timestamp_df['get_rad_mammo_bx_ts']
+    timestamp_df['rad_mri_bx_time'] = timestamp_df['release_rad_mri_bx_ts'] - timestamp_df['get_rad_mri_bx_ts']
+
+    timestamp_df['total_system_time'] = timestamp_df['exit_system_ts'] - timestamp_df['arrival_ts']
+
+    return timestamp_df
