@@ -40,7 +40,6 @@ class MammographyClinicWorkflow:
         # Get exam type distribution based on current time
         exam_type_distribution = exam_type_prob(arrival_ts)
 
-
         # Calculate exam percentage based on exam type
         pct_screen_mammo_scheduled_baseline = list(exam_type_distribution.values())[0]
         pct_dx_mammo_us_scheduled_baseline = sum(list(exam_type_distribution.values())[:2])
@@ -116,7 +115,7 @@ class MammographyClinicWorkflow:
             'exit_system_ts': pd.NA
         }
 
-        # Handle common initial steps
+        # Handle common steps
         yield self.env.process(CheckinStaffHandler(self.env, self.patient, self.clinic, timestamps).run())
 
         # Handle MRI workflows (MRI has its own change rooms, so treated separately)
@@ -130,7 +129,7 @@ class MammographyClinicWorkflow:
                 workflow_handler = MriOnlyWorkflow(self.env, self.patient, self.clinic, timestamps)
                 yield self.env.process(workflow_handler.run())
         else:
-            # Non-MRI workflows (common initial steps)
+            # Handle common steps
             yield self.env.process(PublicWaitRoomHandler(self.env, self.patient, self.clinic, timestamps).run())
             yield self.env.process(ConsentRoomHandler(self.env, self.patient, self.clinic, timestamps, number, pct_dx_us_scheduled).run())
             yield self.env.process(ChangeRoomHandler(self.env, self.patient, self.clinic, timestamps, 'got_change_room_ts', 'release_change_room_ts').run())
@@ -178,6 +177,7 @@ class MammographyClinicWorkflow:
                 workflow_handler = ScreenUSWorkflow(self.env, self.patient, self.clinic, timestamps)
                 yield self.env.process(workflow_handler.run())
 
+            # Handle common steps
             yield self.env.process(ChangeRoomHandler(self.env, self.patient, self.clinic, timestamps, 'got_checkout_change_room_ts', 'release_checkout_change_room_ts').run())
 
         timestamps['exit_system_ts'] = self.env.now
