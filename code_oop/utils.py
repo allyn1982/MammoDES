@@ -120,13 +120,13 @@ class PublicWaitRoomHandler(BaseWorkflowHandler):
 
 class ConsentRoomHandler(BaseWorkflowHandler):
     """Handles the patient consent process, conditional on exam type."""
-    def __init__(self, env, patient, clinic, timestamps, number, pct_dx_us_scheduled): # Changed US to us
+    def __init__(self, env, patient, clinic, timestamps, number, pct_dx_us_scheduled): 
         super().__init__(env, patient, clinic, timestamps)
         self.number = number
-        self.pct_dx_us_scheduled = pct_dx_us_scheduled # Changed US to us
+        self.pct_dx_us_scheduled = pct_dx_us_scheduled
 
     def run(self):
-        if self.number > self.pct_dx_us_scheduled: # Changed US to us
+        if self.number > self.pct_dx_us_scheduled: 
             with self.clinic.consent_staff.request() as request:
                 yield request
                 self.timestamps['got_consent_staff_ts'] = self.env.now
@@ -265,7 +265,7 @@ class ScreenMammoDxMammoUSWorkflow(BaseWorkflowHandler):
 
         request_2 = self.clinic.scanner.request()
         yield request_2
-        self.timestamps['got_dx_scanner_before_us_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['got_dx_scanner_before_us_after_ai_ts'] = self.env.now 
         yield self.env.process(self.clinic.get_dx_mammo(self.patient))
 
         if self.rad_change:
@@ -274,35 +274,35 @@ class ScreenMammoDxMammoUSWorkflow(BaseWorkflowHandler):
             request_rad_after_ai = self.clinic.radiologist.request()
         yield request_rad_after_ai
 
-        self.timestamps['get_rad_dx_mammo_us_mammo_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['get_rad_dx_mammo_us_mammo_after_ai_ts'] = self.env.now 
         yield self.env.process(self.clinic.rad_review(self.patient))
         self.clinic.scanner.release(request_2)
         if self.rad_change:
             self.clinic.radiologist_same_day.release(request_rad_after_ai)
         else:
             self.clinic.radiologist.release(request_rad_after_ai)
-        self.timestamps['release_dx_scanner_before_us_after_ai_ts'] = self.env.now # Changed US to us
-        self.timestamps['release_rad_dx_mammo_us_mammo_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_dx_scanner_before_us_after_ai_ts'] = self.env.now 
+        self.timestamps['release_rad_dx_mammo_us_mammo_after_ai_ts'] = self.env.now 
 
         request_3 = self.clinic.us_machine.request()
         yield request_3
         self.timestamps['got_us_machine_after_dx_scanner_after_ai_ts'] = self.env.now
-        yield self.env.process(self.clinic.get_dx_us(self.patient)) # Changed get_dx_US to get_dx_us
+        yield self.env.process(self.clinic.get_dx_us(self.patient)) 
         if self.rad_change:
             request_rad_after_ai_2 = self.clinic.radiologist_same_day.request()
         else:
             request_rad_after_ai_2 = self.clinic.radiologist.request()
         yield request_rad_after_ai_2
 
-        self.timestamps['get_rad_dx_mammo_us_us_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['get_rad_dx_mammo_us_us_after_ai_ts'] = self.env.now 
         yield self.env.process(self.clinic.rad_review(self.patient))
         self.clinic.us_machine.release(request_3)
         if self.rad_change:
             self.clinic.radiologist_same_day.release(request_rad_after_ai_2)
         else:
             self.clinic.radiologist.release(request_rad_after_ai_2)
-        self.timestamps['release_dx_scanner_us_machine_after_ai_ts'] = self.env.now # Changed US to us
-        self.timestamps['release_rad_dx_mammo_us_us_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_dx_scanner_us_machine_after_ai_ts'] = self.env.now 
+        self.timestamps['release_rad_dx_mammo_us_us_after_ai_ts'] = self.env.now 
 
 
 class ScreenMammoDxMammoWorkflow(BaseWorkflowHandler):
@@ -386,7 +386,7 @@ class ScreenMammoDxUSWorkflow(BaseWorkflowHandler):
         request_2 = self.clinic.us_machine.request()
         yield request_2
         self.timestamps['got_us_machine_after_ai_ts'] = self.env.now
-        yield self.env.process(self.clinic.get_dx_us(self.patient)) # Changed get_dx_US to get_dx_us
+        yield self.env.process(self.clinic.get_dx_us(self.patient)) 
 
         if self.rad_change:
             request_rad_after_ai = self.clinic.radiologist_same_day.request()
@@ -394,14 +394,14 @@ class ScreenMammoDxUSWorkflow(BaseWorkflowHandler):
             request_rad_after_ai = self.clinic.radiologist.request()
         yield request_rad_after_ai
 
-        self.timestamps['get_rad_dx_us_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['get_rad_dx_us_after_ai_ts'] = self.env.now 
         yield self.env.process(self.clinic.rad_review(self.patient))
         self.clinic.us_machine.release(request_2)
         if self.rad_change:
             self.clinic.radiologist_same_day.release(request_rad_after_ai)
         else:
             self.clinic.radiologist.release(request_rad_after_ai)
-        self.timestamps['release_rad_dx_us_after_ai_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_rad_dx_us_after_ai_ts'] = self.env.now 
         self.timestamps['release_us_machine_after_ai_ts'] = self.env.now
 
 
@@ -415,63 +415,63 @@ class DxMammoUSWorkflow(BaseWorkflowHandler):
     def run(self):
         request = self.clinic.scanner.request()
         yield request
-        self.timestamps['got_dx_scanner_before_us_ts'] = self.env.now # Changed US to us
+        self.timestamps['got_dx_scanner_before_us_ts'] = self.env.now
         yield self.env.process(self.clinic.get_dx_mammo(self.patient))
 
         if self.rad_change_2:
             if self.clinic.radiologist_same_day and self.clinic.radiologist_same_day.count != 0:
                 request_rad = self.clinic.radiologist_same_day.request()
                 yield request_rad
-                self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.scanner.release(request)
                 self.clinic.radiologist_same_day.release(request_rad)
             else:
                 request_rad = self.clinic.radiologist.request()
                 yield request_rad
-                self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.scanner.release(request)
                 self.clinic.radiologist.release(request_rad)
         else:
             request_rad = self.clinic.radiologist.request()
             yield request_rad
-            self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now # Changed US to us
+            self.timestamps['get_rad_dx_mammo_us_mammo_ts'] = self.env.now 
             yield self.env.process(self.clinic.rad_review(self.patient))
             self.clinic.scanner.release(request)
             self.clinic.radiologist.release(request_rad)
-        self.timestamps['release_rad_dx_mammo_us_mammo_ts'] = self.env.now # Changed US to us
-        self.timestamps['release_dx_scanner_before_us_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_rad_dx_mammo_us_mammo_ts'] = self.env.now 
+        self.timestamps['release_dx_scanner_before_us_ts'] = self.env.now 
 
         request_2 = self.clinic.us_machine.request()
         yield request_2
         self.timestamps['got_us_machine_after_dx_scanner_ts'] = self.env.now
-        yield self.env.process(self.clinic.get_dx_us(self.patient)) # Changed get_dx_US to get_dx_us
+        yield self.env.process(self.clinic.get_dx_us(self.patient)) 
 
         if self.rad_change_2:
             if self.clinic.radiologist_same_day and self.clinic.radiologist_same_day.count != 0:
                 request_rad_3 = self.clinic.radiologist_same_day.request()
                 yield request_rad_3
-                self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.us_machine.release(request_2)
                 self.clinic.radiologist_same_day.release(request_rad_3)
             else:
                 request_rad_4 = self.clinic.radiologist.request()
                 yield request_rad_4
-                self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.us_machine.release(request_2)
                 self.clinic.radiologist.release(request_rad_4)
         else:
             request_rad_4 = self.clinic.radiologist.request()
             yield request_rad_4
-            self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now # Changed US to us
+            self.timestamps['get_rad_dx_mammo_us_us_ts'] = self.env.now 
             yield self.env.process(self.clinic.rad_review(self.patient))
             self.clinic.us_machine.release(request_2)
             self.clinic.radiologist.release(request_rad_4)
-        self.timestamps['release_rad_dx_mammo_us_us_ts'] = self.env.now # Changed US to us
-        self.timestamps['release_dx_scanner_us_machine_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_rad_dx_mammo_us_us_ts'] = self.env.now
+        self.timestamps['release_dx_scanner_us_machine_ts'] = self.env.now 
 
 
 class DxMammoWorkflow(BaseWorkflowHandler):
@@ -523,31 +523,31 @@ class DxUSWorkflow(BaseWorkflowHandler):
         request = self.clinic.us_machine.request()
         yield request
         self.timestamps['got_us_machine_ts'] = self.env.now
-        yield self.env.process(self.clinic.get_dx_us(self.patient)) # Changed get_dx_US to get_dx_us
+        yield self.env.process(self.clinic.get_dx_us(self.patient)) 
 
         if self.rad_change_2:
             if self.clinic.radiologist_same_day and self.clinic.radiologist_same_day.count != 0:
                 request_rad = self.clinic.radiologist_same_day.request()
                 yield request_rad
-                self.timestamps['get_rad_dx_us_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_us_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.us_machine.release(request)
                 self.clinic.radiologist_same_day.release(request_rad)
             else:
                 request_rad_2 = self.clinic.radiologist.request()
                 yield request_rad_2
-                self.timestamps['get_rad_dx_us_ts'] = self.env.now # Changed US to us
+                self.timestamps['get_rad_dx_us_ts'] = self.env.now 
                 yield self.env.process(self.clinic.rad_review(self.patient))
                 self.clinic.us_machine.release(request)
                 self.clinic.radiologist.release(request_rad_2)
         else:
             request_rad = self.clinic.radiologist.request()
             yield request_rad
-            self.timestamps['get_rad_dx_us_ts'] = self.env.now # Changed US to us
+            self.timestamps['get_rad_dx_us_ts'] = self.env.now 
             yield self.env.process(self.clinic.rad_review(self.patient))
             self.clinic.us_machine.release(request)
             self.clinic.radiologist.release(request_rad)
-        self.timestamps['release_rad_dx_us_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_rad_dx_us_ts'] = self.env.now
         self.timestamps['release_us_machine_ts'] = self.env.now
 
 
@@ -562,21 +562,21 @@ class USGuidedBiopsyWorkflow(BaseWorkflowHandler):
             yield request & request_rad
             self.timestamps['got_us_machine_bx_ts'] = self.env.now
             self.timestamps['got_scanner_bx_ts'] = pd.NA
-            yield self.env.process(self.clinic.get_us_guided_bx(self.patient)) # Changed get_US_guided_bx to get_us_guided_bx
+            yield self.env.process(self.clinic.get_us_guided_bx(self.patient)) 
             self.timestamps['release_us_machine_after_bx_ts'] = self.env.now
 
         request_2 = self.clinic.scanner.request()
         yield request_2
-        self.timestamps['got_scanner_after_us_bx_ts'] = self.env.now # Changed US to us
+        self.timestamps['got_scanner_after_us_bx_ts'] = self.env.now 
         yield self.env.process(self.clinic.get_dx_mammo(self.patient))
 
         request_rad = self.clinic.radiologist.request()
-        self.timestamps['get_rad_us_bx_ts'] = self.env.now # Changed ux to us
+        self.timestamps['get_rad_us_bx_ts'] = self.env.now 
         yield request_rad
         yield self.env.process(self.clinic.rad_review(self.patient))
         self.clinic.scanner.release(request_2)
         self.clinic.radiologist.release(request_rad)
-        self.timestamps['release_rad_us_bx_ts'] = self.env.now # Changed US to us
+        self.timestamps['release_rad_us_bx_ts'] = self.env.now 
         self.timestamps['release_scanner_after_post_bx_mammo_ts'] = self.env.now
 
 
@@ -610,7 +610,7 @@ class ScreenUSWorkflow(BaseWorkflowHandler):
         with self.clinic.us_machine.request() as request:
             yield request
             self.timestamps['got_screen_us_machine_ts'] = self.env.now
-            yield self.env.process(self.clinic.get_screen_us(self.patient)) # Changed get_screen_US to get_screen_us
+            yield self.env.process(self.clinic.get_screen_us(self.patient))
             self.timestamps['release_screen_us_machine_ts'] = self.env.now
 
 def compute_durations(timestamp_df):
